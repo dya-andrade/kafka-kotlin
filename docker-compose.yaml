@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+
+  zookeeper:
+    container_name: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - bubble
+
+  kafka:
+    container_name: kafka
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: INSIDE://:9093,OUTSIDE://localhost:9094
+      KAFKA_LISTENERS: INSIDE://:9093,OUTSIDE://:9094
+      KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    ports:
+      - "9093:9093"
+      - "9094:9094"
+    networks:
+      - bubble
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui
+    container_name: kafka-ui
+    ports:
+      - "8082:8080"
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9093
+    networks:
+      - bubble
+
+  kafka-init-topics:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka-topics
+    depends_on:
+      - kafka
+    command: "bash -c 'echo Creating Topics... && \
+               kafka-topics --create --bootstrap-server kafka:9093 --partitions 3 --replication-factor 1 --if-not-exists --topic test-topic && \
+               kafka-topics --create --bootstrap-server kafka:9093 --partitions 2 --replication-factor 1 --if-not-exists --topic test-topic-DLQ'"
+    networks:
+      - bubble
+
+networks:
+  bubble:
+    external: true
