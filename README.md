@@ -7,3 +7,7 @@ Progress: Develop a REST API with Kafka, MySQL e Kotlin.
 docker-compose up -d --build
 ````
 
+````shell
+docker stop $(docker container ls -q)
+````
+
