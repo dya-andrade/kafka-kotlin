@@ -1,5 +1,6 @@
-package com.mulhermarav
+package com.mulhermarav.integration
 
+import com.mulhermarav.model.Message
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.core.KafkaTemplate
+import org.springframework.kafka.support.serializer.JsonDeserializer
 import org.springframework.kafka.test.context.EmbeddedKafka
 import org.springframework.test.annotation.DirtiesContext
 import java.time.Duration
@@ -23,9 +25,9 @@ import java.util.*
 class KafkaIntegrationTest {
 
     @Autowired
-    private lateinit var kafkaTemplate: KafkaTemplate<String, String>
+    private lateinit var kafkaTemplate: KafkaTemplate<String, Message>
 
-    private lateinit var consumer: KafkaConsumer<String, String>
+    private lateinit var consumer: KafkaConsumer<String, Message>
 
     @KafkaListener(topics = ["test-topic"], groupId = "test-group")
     fun listen(message: String) {
@@ -34,11 +36,11 @@ class KafkaIntegrationTest {
 
     @Test
     fun testKafkaIntegration() {
-        kafkaTemplate.send("test-topic", "test-key", "This is a test!")
+        kafkaTemplate.send("test-topic", "test-key", Message(1,"This is a test!"))
 
         Thread.sleep(1000)
 
-        kafkaTemplate.send("test-topic-2", "test-key-2", "This is a test 2!")
+        kafkaTemplate.send("test-topic-2", "test-key-2", Message(2,"This is a test 2!"))
 
         val props = Properties()
         props[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = "localhost:9094"
@@ -46,7 +48,7 @@ class KafkaIntegrationTest {
         props[ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
         props[ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG] = StringDeserializer::class.java.name
 
-        consumer = KafkaConsumer(props)
+        consumer = KafkaConsumer(props, StringDeserializer(), JsonDeserializer(Message::class.java))
         consumer.subscribe(listOf("test-topic-2"))
 
         val records = consumer.poll(Duration.ofMillis(1000))

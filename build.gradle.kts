@@ -25,9 +25,13 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springframework.kafka:spring-kafka")
+	implementation("com.fasterxml.jackson.core:jackson-databind:2.16.1")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.mysql:mysql-connector-j")
 
+	testImplementation("io.kotest:kotest-runner-junit5-jvm:4.6.0")
+	testImplementation("io.mockk:mockk:1.13.8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.kafka:spring-kafka-test")
 

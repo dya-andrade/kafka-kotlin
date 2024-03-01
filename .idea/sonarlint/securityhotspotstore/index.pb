@@ -21,3 +21,21 @@ Y
 HELP.md,1/a/1a273f73b7a477b0745593641bd708a6182c7ad5
 `
 0src/main/kotlin/com/mulhermarav/model/Message.kt,b/a/ba6375c5af8f71b3596a9a0abd7a5b2a44686906
+9
+	README.md,8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d
+Z
+*src/main/kotlin/com/mulhermarav/Startup.kt,2/1/21a25e989884436f629ad7c10e93af51298299bf
+m
+=src/main/kotlin/com/mulhermarav/config/KafkaConsumerConfig.kt,7/6/76779f0773ca4df43dad1373fe5c2d0aea6e5c84
+m
+=src/main/kotlin/com/mulhermarav/config/KafkaProducerConfig.kt,e/c/eca5d7f23d47f206590dd29b559f1a2d9bbb3677
+o
+?src/main/kotlin/com/mulhermarav/service/KafkaProducerService.kt,6/6/66499c58d306efa140f3bf27958a0c48f1f83271
+o
+?src/main/kotlin/com/mulhermarav/service/KafkaConsumerService.kt,4/1/41cd415d416c07ff3b9a1e45b22a14d826da4554
+@
+build.gradle.kts,d/b/dbcff70658daf80b53ce624f6adcaa529df5ed8d
+g
+7src/test/kotlin/com/mulhermarav/KafkaIntegrationTest.kt,1/e/1eaf80e89ba75883849bc6b1f46eba65932e8d94
+_
+/src/test/kotlin/com/mulhermarav/KafkaDlqTest.kt,9/1/91abf5de9da0987ade02f23ecc7dd0f07a28e8dd

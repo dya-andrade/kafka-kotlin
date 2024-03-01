@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/kafka")
-class KafkaController(private val kafkaProducerService: KafkaProducerService,
-                      private val repository: MessageRepository) {
+class KafkaController(
+    private val kafkaProducerService: KafkaProducerService,
+    private val repository: MessageRepository
+) {
 
     @PostMapping("/send")
-    fun sendMessageToKafka(@RequestBody message: String) {
+    fun sendMessageToKafka(@RequestBody message: Message) {
         kafkaProducerService.sendMessage("test-topic", message)
     }
 

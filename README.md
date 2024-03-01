@@ -11,3 +11,9 @@ docker-compose up -d --build
 docker stop $(docker container ls -q)
 ````
 
+* Listar tópicos via terminal
+
+````shell
+kafka-topics --bootstrap-server localhost:9094 --list
+````
+
