@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service
 @Service
 class KafkaConsumerService(private val repository: MessageRepository) {
 
-    //dltStrategy = DltStrategy.FAIL_ON_ERROR / NO_DLT
     @RetryableTopic(
         attempts = "1",
         kafkaTemplate = "kafkaTemplate",
@@ -21,16 +20,14 @@ class KafkaConsumerService(private val repository: MessageRepository) {
     @KafkaListener(
         topics = ["test-topic"],
         groupId = "test-consumers")
-    fun dltMessage(message: Message, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String) {
+    fun dltMessage(@Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, message: Message) {
         val entity = repository.save(message)
 
         println("Received Message in group test-consumers: $entity and topic: $topic")
-
-        throw RuntimeException("Simulating processing failure")
     }
 
     @DltHandler
-    fun dltHandler(message: Message, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String) {
+    fun dltHandler(@Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, message: Message) {
         println("Handling message $message and topic: $topic from DLT")
     }
 }
